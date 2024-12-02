@@ -10,7 +10,7 @@ if __name__ == "__main__":
     with open("day-01/input.txt", "r", encoding="utf-8") as f:
         lines = f.readlines()
         len_lines = len(lines)
-        
+
     # Format nicely
     lines = [line.strip().split() for line in lines]
     np_lines = np.array(lines, dtype=int)
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     # Find similarity scores
     print(np_lines.T.shape)
-    
+
     # Add extra column to store the similarity scores
     np_lines = np.append(np_lines, np.zeros((len_lines, 1), dtype=int), axis=1)
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
             if val == val2:
                 common_counter += 1
-        
+
         # Similarity score -> times the value occurs in the second column
         np_lines.T[2, i] = common_counter * val
 
