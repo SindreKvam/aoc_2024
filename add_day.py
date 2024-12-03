@@ -14,9 +14,13 @@ import numpy as np
 def solution1(data):
     \"\"\"Solution to part 1\"\"\"
 
+    return
+
 
 def solution2(data):
     \"\"\"Solution to part 2\"\"\"
+
+    return
     
 
 if __name__ == "__main__":
