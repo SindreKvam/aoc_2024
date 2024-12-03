@@ -8,8 +8,6 @@ def get_python_file_content(day):
 
     return f"""\"\"\"Day {day} Puzzle Solution\"\"\"
 
-import numpy as np
-
 
 def solution1(data):
     \"\"\"Solution to part 1\"\"\"
@@ -26,11 +24,13 @@ def solution2(data):
 if __name__ == "__main__":
     # Read the input file
     with open("day-{day}/input.txt", "r", encoding="utf-8") as f:
-        data = f.readlines()
+        DATA = f.readlines()
 
-    answ1 = solution1(data)
+    answ1 = solution1(DATA)
+    print(f"Solution 1: {{answ1}}")
 
-    answ2 = solution2(data)
+    answ2 = solution2(DATA)
+    print(f"Solution 2: {{answ1}}")
 """
 
 
