@@ -21,11 +21,11 @@ def solution2(data):
     \"\"\"Solution to part 2\"\"\"
 
     return
-    
+
 
 if __name__ == "__main__":
     # Read the input file
-    with open("day-02/input.txt", "r", encoding="utf-8") as f:
+    with open("day-{day}/input.txt", "r", encoding="utf-8") as f:
         data = f.readlines()
 
     answ1 = solution1(data)
