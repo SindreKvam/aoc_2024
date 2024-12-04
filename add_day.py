@@ -30,7 +30,7 @@ if __name__ == "__main__":
     print(f"Solution 1: {{answ1}}")
 
     answ2 = solution2(DATA)
-    print(f"Solution 2: {{answ1}}")
+    print(f"Solution 2: {{answ2}}")
 """
 
 
