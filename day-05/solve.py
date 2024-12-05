@@ -76,7 +76,44 @@ def solution1(data):
 def solution2(data):
     """Solution to part 2"""
 
-    return
+    rules = get_rules(data)
+    page_numbers = get_page_numbers(data)
+
+    middle_page_sum = 0
+
+    for pages in page_numbers:
+
+        relevant_rules = find_relevant_rules(pages, rules)
+        valid = True
+
+        i = 0
+        while i < len(relevant_rules):
+            # for rule in relevant_rules:
+
+            rule = relevant_rules[i]
+
+            first_item = np.where(pages == rule[0])[0][0]
+            last_item = np.where(pages == rule[1])[0][0]
+
+            if first_item < last_item:
+                i += 1
+                continue
+
+            valid = False
+
+            # Last item was before expected first item
+            # Move first item to the position before the last item
+            # And continue until all rules are satisfied
+            move_value = pages[first_item]
+            pages = np.delete(pages, first_item)
+            pages = np.insert(pages, last_item, move_value)
+            i = 0
+
+        # Only count the ones that originally was invalid
+        if not valid:
+            middle_page_sum += pages[len(pages) // 2]
+
+    return middle_page_sum
 
 
 if __name__ == "__main__":
