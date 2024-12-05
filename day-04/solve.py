@@ -1,6 +1,5 @@
 """Day 04 Puzzle Solution"""
 
-import re
 import numpy as np
 
 
@@ -8,7 +7,7 @@ def _diagonal_matrix_to_string(data):
     return "".join([str(data[i][i]) for i in range(len(data))])
 
 
-def find_diagonal_words(word: str, data: list):
+def _get_diagonal_words(data: list):
     """Get all the values that are on the diagonal
     This function expects square matrix input"""
 
@@ -18,7 +17,9 @@ def find_diagonal_words(word: str, data: list):
     data_arr = np.array(data_arr)
 
     diagonal_words = []
+    # Along identity matrix diagonal
     diagonal_words.append(_diagonal_matrix_to_string(data_arr))
+    # Along reverse identity matrix diagonal
     diagonal_words.append(_diagonal_matrix_to_string(data_arr_reverse))
 
     for i in range(1, len(data_arr)):
@@ -32,6 +33,14 @@ def find_diagonal_words(word: str, data: list):
         diagonal_words.append(_diagonal_matrix_to_string(small_data_arr_reverse1))
         diagonal_words.append(_diagonal_matrix_to_string(small_data_arr2))
         diagonal_words.append(_diagonal_matrix_to_string(small_data_arr_reverse2))
+
+    return diagonal_words
+
+
+def find_diagonal_words(word: str, data: list):
+    """Find all diagonal occurrences of the word"""
+
+    diagonal_words = _get_diagonal_words(data)
 
     return find_horizontal_word(word, diagonal_words)
 
@@ -76,10 +85,60 @@ def solution1(data, word: str = "XMAS"):
     return num_occurrences
 
 
+def find_cross_words(word: str, data: list):
+    """Get all the values that are on the diagonal
+    This function expects square matrix input"""
+
+    center_letter_distance = len(word) // 2
+    center_letter = word[center_letter_distance]
+
+    center_pos = []
+    for i in range(1, len(data) - 1):
+        for j in range(1, len(data) - 1):
+
+            if data[i][j] == center_letter:
+                center_pos.append((i, j))
+
+    num_occurrences = 0
+    for pos in center_pos:
+        top_left = (pos[0] - center_letter_distance, pos[1] - center_letter_distance)
+        top_right = (pos[0] - center_letter_distance, pos[1] + center_letter_distance)
+        bottom_left = (pos[0] + center_letter_distance, pos[1] - center_letter_distance)
+        bottom_right = (
+            pos[0] + center_letter_distance,
+            pos[1] + center_letter_distance,
+        )
+
+        if (
+            (
+                (data[top_left[0]][top_left[1]] in (word[-1]))
+                and (data[bottom_right[0]][bottom_right[1]] in (word[0]))
+            )
+            or (
+                (data[top_left[0]][top_left[1]] in (word[0]))
+                and (data[bottom_right[0]][bottom_right[1]] in (word[-1]))
+            )
+        ) and (
+            (
+                (data[top_right[0]][top_right[1]] in (word[-1]))
+                and (data[bottom_left[0]][bottom_left[1]] in (word[0]))
+            )
+            or (
+                (data[top_right[0]][top_right[1]] in (word[0]))
+                and (data[bottom_left[0]][bottom_left[1]] in (word[-1]))
+            )
+        ):
+            num_occurrences += 1
+
+    return num_occurrences
+
+
 def solution2(data):
     """Solution to part 2"""
 
-    return
+    count = find_cross_words("MAS", data)
+
+    return count
 
 
 if __name__ == "__main__":
