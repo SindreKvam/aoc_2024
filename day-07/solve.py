@@ -36,7 +36,7 @@ def parse_data(data):
     return test_values, test_variables
 
 
-def calculate(
+def check_calculate_operators(
     expected_answer: int, variables: np.ndarray, operators: list[Operators]
 ) -> int:
     """Calculate the expected answer using the variables and operators
@@ -86,7 +86,7 @@ def solution1(data):
 
     total_sum = 0
     for i, test_value in enumerate(test_values):
-        total_sum += calculate(
+        total_sum += check_calculate_operators(
             test_value, test_variables[i], [Operators.ADD, Operators.MULTIPLY]
         )
 
@@ -100,7 +100,7 @@ def solution2(data):
 
     total_sum = 0
     for i, test_value in enumerate(test_values):
-        total_sum += calculate(
+        total_sum += check_calculate_operators(
             test_value,
             test_variables[i],
             [Operators.ADD, Operators.MULTIPLY, Operators.CONCAT],
