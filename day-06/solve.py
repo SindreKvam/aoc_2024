@@ -2,6 +2,7 @@
 
 import logging
 import numpy as np
+from alive_progress import alive_bar
 
 logger = logging.getLogger(__name__)
 
@@ -206,8 +207,6 @@ def solution1(data):
     distinct_positions = set()
 
     data = update_data_format(data)
-    len_x, len_y = data.shape
-    print(len_x, len_y)
     logger.info("Map :\n %s", data)
     # Fetch the coordinates of all interesting points
     guard_coordinates = get_start_coordinates(data)
@@ -251,7 +250,58 @@ def solution1(data):
 def solution2(data):
     """Solution to part 2"""
 
-    return
+    data = update_data_format(data)
+    # Fetch the coordinates of all interesting points
+    initial_guard_coordinates = get_start_coordinates(data)
+    initial_obstacles = get_obstacle_coordinates(data)
+
+    number_of_times_stuck = 0
+    with alive_bar(grid_size[0]) as bar:
+        for x, row in enumerate(data):
+            for y, _ in enumerate(row):
+
+                if (x, y) == initial_guard_coordinates:
+                    continue
+
+                if (x, y) in initial_obstacles:
+                    continue
+
+                guard_coordinates = initial_guard_coordinates[:]
+                obstacles = initial_obstacles[:]
+
+                obstacles = list(obstacles)
+                obstacles.append((x, y))
+                obstacles = tuple(obstacles)
+
+                stop = False
+                guard_stops = []
+                while stop is False:
+
+                    for func in [move_north, move_east, move_south, move_west]:
+
+                        logger.debug("Function : %s", func.__name__)
+                        logger.debug("Guard coordinates : %s", guard_coordinates)
+                        guard_coordinates, points_touched = func(
+                            guard_coordinates, obstacles
+                        )
+
+                        if guard_coordinates in guard_stops and len(points_touched) > 1:
+                            # Guard is stuck in a loop
+                            stop = True
+                            number_of_times_stuck += 1
+                            break
+
+                        guard_stops.append(guard_coordinates)
+
+                        # if guard has reached the end of the grid
+                        if (guard_coordinates[0] in [0, grid_size[0] - 1]) or (
+                            guard_coordinates[1] in [0, grid_size[0] - 1]
+                        ):
+                            stop = True
+                            break
+            bar()
+
+    return number_of_times_stuck
 
 
 if __name__ == "__main__":
@@ -262,8 +312,12 @@ if __name__ == "__main__":
     with open("day-06/input.txt", "r", encoding="utf-8") as f:
         DATA = f.readlines()
 
+    logger.info("------ Solution 1 ------")
+
     answ1 = solution1(DATA)
     print(f"Solution 1: {answ1}")
+
+    logger.info("------ Solution 2 ------")
 
     answ2 = solution2(DATA)
     print(f"Solution 2: {answ2}")
